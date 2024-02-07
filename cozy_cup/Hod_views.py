@@ -79,7 +79,7 @@ def Add_student(request):
             )
             student.save()
             messages.success(request, user.first_name + "  " + user.last_name + " Are Successfully Added !")
-            return redirect('Add_student')
+            return redirect('View_student')
 
 
 
@@ -380,13 +380,13 @@ def Edit_session(request, id):
     }
     return render(request,'Hod/edit_session.html',context)
 def Staff_send_notification(request):
-    staff=Staff.objects.get.all()
+    staff=Staff.objects.all()
     context={
         'staff':staff
     }
-    return render(request,'Hod/staff_notification.html')
+    return render(request,'Hod/staff_notification.html',context)
 def Staff_apply_leave(request):
 
-    return render(request,'Hod/staff_leave')
+    return render(request,'Hod/staff_leave.html')
 
 
