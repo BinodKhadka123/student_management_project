@@ -55,45 +55,40 @@ def Staff_apply_leave_save(request):
       messages.success(request,'Leave Sucessfully sent')
     return redirect('apply_leave')
 def Staff_add_result(request):
-    try:
-        staff = Staff.objects.get(admin=request.user)
-        subjects = Subject.objects.filter(staff=staff)
-        session_year = Session.objects.all()
-    except Staff.DoesNotExist:
-        staff = None
-        subjects = None
-        session_year = None
+    staff = Staff.objects.get(admin = request.user.id)
 
+    subjects = Subject.objects.filter(staff_id = staff)
+    session_year = Session.objects.all()
     action = request.GET.get('action')
     get_subject = None
     get_session = None
     students = None
-
     if action is not None:
         if request.method == "POST":
-            subject_id = request.POST.get('subject_id')
-            session_year_id = request.POST.get('session_year_id')
+           subject_id = request.POST.get('subject_id')
+           session_year_id = request.POST.get('session_year_id')
 
-            get_subject = Subject.objects.get(id=subject_id)
-            get_session = Session.objects.get(id=session_year_id)
+           get_subject = Subject.objects.get(id = subject_id)
+           get_session = Session.objects.get(id = session_year_id)
 
-            # Retrieve students for the selected subject and session year
-            students = Student.objects.filter(course_id=get_subject.course, session_year_id=get_session)
+           subjects = Subject.objects.filter(id = subject_id)
+           print(subjects)
+           for i in subjects:
+               student_id = i.course.id
+               students = Student.objects.filter(course_id = student_id)
 
-    print("Number of students:", len(students))  # Debugging statement
 
     context = {
-        'staff': staff,
-        'subjects': subjects,
-        'session_year': session_year,
-        'action': action,
-        'get_subject': get_subject,
-        'get_session': get_session,
-        'students': students,
+        'subjects':subjects,
+        'session_year':session_year,
+        'action':action,
+        'get_subject':get_subject,
+        'get_session':get_session,
+        'students':students,
     }
     print(students)
 
-    return render(request, 'Staff/add_result.html', context)
+    return render(request,'Staff/add_result.html',context)
 
 
 # def Staff_save_result(request):
