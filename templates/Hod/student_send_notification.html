@@ -6,10 +6,10 @@
    <div class="page-header">
       <div class="row align-items-center">
          <div class="col">
-            <h3 class="page-title">Students</h3>
+            <h3 class="page-title">Student Notification</h3>
             <ul class="breadcrumb">
                <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-               <li class="breadcrumb-item active">Students</li>
+               <li class="breadcrumb-item active">Student Notification</li>
             </ul>
          </div>
          <div class="col-auto text-right float-right ml-auto">
@@ -38,7 +38,7 @@
                          </tr>
                       </thead>
                       <tbody>
-                        {%for i in staff%}
+                        {%for i in student%}
                          <tr>
                             <td>{{i.id}}</td>
                             <td>
@@ -54,7 +54,7 @@
                            
                             <td class="text-right">
                               <button type="button" class="btn btn-success" data-toggle="modal" data-target="#send_notification_modal--{{forloop.counter}}">
-                                 Send Staff Notification 
+                                 Send Student Notification 
                                </button>
                             </td>
                          </tr>
@@ -91,7 +91,7 @@
                          </tr>
                       </thead>
                       <tbody>
-                        {%for i in see_notification%}
+                        {%for i in notification%}
                          <tr>
                            
                             <td>{{i.message}}</td>
@@ -128,7 +128,7 @@
 </div>
 </div>
 </div>
-{%for i in staff%}
+{%for i in student%}
 <div class="modal fade" id="send_notification_modal--{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 <div class="modal-dialog modal-dialog-centered" role="document">
 <div class="modal-content">
@@ -139,11 +139,11 @@
 </button>
 </div>
 <div class="modal-body">
-   <form method="post" action="{% url 'Save_staff_notification' %}" >
+   <form method="post" action="{% url 'Save_student_notification' %}" >
       {% csrf_token %}
       <div class="form-group row">
         
-          <input type="text" class="form-control"  hidden name="staff_id" value="{{i.admin.id}}">
+          <input type="text" class="form-control"  hidden name="student_id" value="{{i.admin.id}}">
           <input type="text" class="form-control" name="message">
         </div>
         <div class="form-group row">

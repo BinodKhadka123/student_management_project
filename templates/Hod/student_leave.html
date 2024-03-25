@@ -4,10 +4,10 @@
     <div class="page-header">
        <div class="row align-items-center">
           <div class="col">
-             <h3 class="page-title">Staff</h3>
+             <h3 class="page-title">Student</h3>
              <ul class="breadcrumb">
                 <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-                <li class="breadcrumb-item active">Staff</li>
+                <li class="breadcrumb-item active">Student</li>
              </ul>
           </div>
           <div class="col-auto text-right float-right ml-auto">
@@ -25,7 +25,7 @@
                       <thead>
                          <tr>
                             <th>ID</th>
-                            <th> Staff Name</th>
+                            <th> Student Name</th>
 
                             <th>Date</th>
                             <th>Message</th>
@@ -33,17 +33,17 @@
                          </tr>
                       </thead>
                       <tbody>
-                        {%for i in staff_leave%}
+                        {%for i in student_leave%}
                          <tr>
                             <td>{{i.id}}</td>
-                            <td>{{i.staff_id.admin.first_name}}</td>
+                            <td>{{i.student_id.admin.first_name}}</td>
                            <td>{{i.date}}</td>
                             <td>{{i.message}}</td>
                             <td class="text-right">
                                <div class="actions">
                                  {% if  i.status == 0 %}
-                                 <a href="{% url 'staff_approve_leave' i.id%}"  class="btn btn-success">Approved </a>
-                                 <a href="{% url 'staff_disapprove_leave' i.id%}"  class="btn btn-danger">Disapproved </a>
+                                 <a href="{% url 'student_approve_leave' i.id%}"  class="btn btn-success">Approved </a>
+                                 <a href="{% url 'student_disapprove_leave' i.id%}"  class="btn btn-danger">Disapproved </a>
                                  {% elif i.status == 1  %}
                                  <button class="btn btn-success" disabled="disabled">Approved </button>
                                  

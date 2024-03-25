@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{%block content%}
+<div class="row">
+    <div class="col-sm-12">
+    <div class="card">
+    <div class="card-body">
+    <form method="post" action="">
+            {% csrf_token %}
+    <div class="row">
+    <div class="col-12">
+    <h5 class="form-title"><span>Take Attendance</span></h5>
+    </div>
+    {% include "Includes/messages.html" %}
+    
+    <div class="col-12 col-sm-6 mt-2">
+    <div class="form-group">
+        <label>Subject</label>
+        <select class="form-control" name="course_id" required>
+           <option>Select Subject</option>
+            {% for i in  subject %}
+           <option value="{{i.id}}">{{i.name}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    </div>
+    <div class="col-12 col-sm-6" mt-2>
+        <div class="form-group">
+            <label>Session Year</label>
+            <select class="form-control" name="staff_id" required>
+               <option>Select Session</option>
+                {% for i in session_year %}
+               <option value="{{i.id}}">{{i.session_start}} {{i.session_start}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        </div>
+    <div class="col-12" mt-6>
+    <button type="submit"  name="submit" class="btn btn-primary">Submit</button>
+    </div>
+    </div>
+    </form>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    
+    </div>
+    
+    
+{% endblock %}

@@ -26,9 +26,9 @@ def doLogin(request):
             if user_type == '1':
                 return redirect('Hod_home')
             elif user_type == '2':
-                return HttpResponse('This is Staff Panel')
+                return redirect('staff_home')
             elif user_type == '3':
-                return HttpResponse('This is Student Panel')
+                return redirect('student_home')
             else:
                 messages.error(request,'Email and Password Are Invalid !')
                 return redirect('login')

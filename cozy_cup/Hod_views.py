@@ -1,7 +1,9 @@
-from django.http import HttpResponse
+from django.urls import reverse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
-from app.models import Course,Session,Student,CustomUser,Staff,Subject
+from django.views.generic.edit import CreateView
+from app.models import *
 from django.contrib import messages
 
 from cozy_cup import Staff_views
@@ -164,6 +166,8 @@ def Add_course(request):
         return redirect('Add_course')
 
     return render(request, 'Hod/add_course.html')
+
+
 def View_course(request):
     course = Course.objects.all()
     context={
@@ -171,19 +175,24 @@ def View_course(request):
     }
     return render(request, 'Hod/view_course.html',context)
 
-def Edit_course(request,id):
-    course = Course.objects.get(Course, id=id)
+def Edit_course(request, id):
+    try:
+        course = Course.objects.get(id=id)
+    except Course.DoesNotExist:
+        messages.error(request, "Course does not exist.")
+        return redirect('View_course')
+    
     context = {
-        'course': course,  # Convert the single course to a list
+        'course': course,
     }
-    return render(request, 'Hod/edit_course.html',context)
+    return render(request, 'Hod/edit_course.html', context)
 def Update_course(request):
     if request.method == "POST":
         name = request.POST.get('name')
         course_id = request.POST.get('course_id')
         
-        # Use 'objects' instead of 'object'
-        course = Course.objects.get(id=course_id)
+        # Use get_object_or_404 to retrieve the course or return a 404 error if it doesn't exist
+        course = get_object_or_404(Course, id=course_id)
         
         course.name = name 
         course.save()
@@ -381,12 +390,96 @@ def Edit_session(request, id):
     return render(request,'Hod/edit_session.html',context)
 def Staff_send_notification(request):
     staff=Staff.objects.all()
+    see_notification=Staff_notification.objects.all()
     context={
-        'staff':staff
+        'staff':staff,
+        'see_notification':see_notification,
     }
     return render(request,'Hod/staff_notification.html',context)
-def Staff_apply_leave(request):
+def Save_staff_notification(request):
+    if request.method == "POST":
+        staff_id = request.POST.get('staff_id')
+        message = request.POST.get('message')
+        staff = Staff.objects.get(admin=staff_id)
+        notification = Staff_notification(
+            staff_id=staff,
+            message=message
+        )
+        notification.save()
+        messages.success(request,"notification sent sucessful")
+    return redirect('Staff_send_notification')
+def Staff_leave_view(request):
+    staff_leave=Staff_leave.objects.all()
+    context={
+        'staff_leave':staff_leave
+        
+    }
 
-    return render(request,'Hod/staff_leave.html')
+    return render(request,'Hod/staff_leave.html',context)
+def Staff_approve_leave(request,id):
+    leave=Staff_leave.objects.get(id=id)
+    leave.status = 1
+    leave.save()
+   
+    url = reverse('staff_leave_view')
 
+    # Redirect to the generated URL
+    return HttpResponseRedirect(url)
+def Staff_disapprove_leave(request,id):
+    leave=Staff_leave.objects.get(id=id)
+    leave.status = 2
+    leave.save()
+    url = reverse('staff_leave_view')
 
+    # Redirect to the generated URL
+    return HttpResponseRedirect(url)
+   
+
+def Student_send_notification(request):
+    student= Student.objects.all()
+    notification = Student_notification.objects.all()
+    context={
+        'student':student,
+        'notification':notification,
+    }
+    return render(request,'Hod/student_send_notification.html',context)
+
+def Save_student_notification(request):
+    if request.method == 'POST':
+        message = request.POST.get('message')
+        student_id = request.POST.get('student_id')
+        student = Student.objects.get(admin = student_id)
+        stud_notification = Student_notification(
+            student_id = student,
+            message = message,
+        )
+        stud_notification.save()
+        messages.success(request,'Student Notification Send Sucessfull')
+        
+    
+    return redirect('Student_send_notification',)
+def Student_leave_view(request):
+    student_leave=Student_leave.objects.all()
+    context={
+        'student_leave':student_leave
+        
+    }
+
+    return render(request,'Hod/student_leave.html',context)
+def Student_approve_leave(request,id):
+    leave=Student_leave.objects.get(id=id)
+    leave.status = 1
+    leave.save()
+   
+    url = reverse('student_leave_view')
+
+    # Redirect to the generated URL
+    return HttpResponseRedirect(url)
+def Student_disapprove_leave(request,id):
+    leave=Student_leave.objects.get(id=id)
+    leave.status = 2
+    leave.save()
+    url = reverse('student_leave_view')
+
+    # Redirect to the generated URL
+    return HttpResponseRedirect(url)
