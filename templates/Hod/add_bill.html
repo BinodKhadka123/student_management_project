@@ -1,0 +1,31 @@
+<!-- show_bills.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Billing Information</title>
+</head>
+<body>
+    <h1>Billing Information</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Student</th>
+                <th>Course</th>
+                <th>Amount</th>
+                <th>Billed At</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for bill in bills %}
+            <tr>
+                <td>{{ bill.student }}</td>
+                <td>{{ bill.course.name }}</td>
+                <td>{{ bill.amount }}</td>
+                <td>{{ bill.billed_at }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block content %}
 <div class="page-header">
     <div class="row align-items-center">
@@ -37,9 +37,9 @@
                             <div class="actions">
 
                                {% if i.status == 0  %}
-                               <button class="btn btn-danger">Mark As Done</button> 
+                               <a href="" class="btn btn-danger">Mark As Done</a> 
                                {% else %}
-                               <button class="btn btn-danger"disabled="disabled">Mark As Done</button> 
+
                                {% endif %}
                             </div>
                          </td>

@@ -8,6 +8,7 @@ from django.conf.urls.static import static
 from . import views,Hod_views,Staff_views,Student_views
 
 urlpatterns = [
+  path('student/pdf',Hod_views.Student_pdf,name='student_pdf'),
     path('admin/', admin.site.urls),
     path('base/', views.Base, name='base'),
     path('login/',views.Login, name='login'),
@@ -56,26 +57,34 @@ urlpatterns = [
           
            path('hod/student/send_notification', Hod_views.Student_send_notification, name='Student_send_notification'),
             path('hod/student/save_notification', Hod_views.Save_student_notification, name='Save_student_notification'),
+        path('bill/',Hod_views.show_bills,name='create_bill'),
         
-        #this ia staff url
         path('staff/home/', Staff_views.Home, name='staff_home'),  
         path('staff/notification',Staff_views.Notification,name='notification'),
+         path('staff/mark/done/<int:status>',Staff_views.Staff_notification_mark_as_done,
+                name='staff_notification_mark'),
+        
         path('staff/apply/leave',Staff_views.Staff_apply_leave,name='apply_leave'),
         path('staff/apply/leave/save',Staff_views.Staff_apply_leave_save,name='staff_apply_leave_save'),
-        path('staff/take/attendence',Staff_views.Staff_take_attendence,name='staff_take_attendence'),
+        path('staff/take/attendence',Staff_views.Staff_take_attendence,name='take_attendence'),
+        path('staff/save/attendence', Staff_views.Staff_save_attendence, name='save_attendence'),
+         path('staff/view/attendence', Staff_views.Staff_view_attendence, name='view_attendence'),
         
         
         path('staff/add/result',Staff_views.Staff_add_result,name='staff_add_result'),
-        # path('staff/save/result',Staff_views.Staff_save_result,name='staff_save_result'),
+         path('staff/save/result',Staff_views.Staff_save_result,name='staff_save_result'),
         #this is student url
         path('student/home/', Student_views.Home, name='student_home'),  
          path('student/notification',Student_views.Student_notification_send,name='student_notification'),
            path('student/mark/done/<str:status>',Student_views.Student_notification_mark_as_done,
                 name='student_notification_mark'),
+           path('bills/', Student_views.view_student_bills, name='view_student_bills'),
             path('student/apply/leave',Student_views.Student_apply_leave,name='leave'),
              path('student/apply/leave/save',Student_views.Student_apply_leave_save,name='student_apply_leave_save'),
-        
-        
+             path('student/view/attendence', Student_views.Student_view_attendence, name='student_view_attendence'),
+      path('student/view/result',Student_views.Student_view_result,name='student_view_result'),  
+      #path('student/download_attendance_excel/',Student_views.download_attendance_excel, name='download_attendance_excel'),
+    # Add other URL patterns as needed
         
          
     

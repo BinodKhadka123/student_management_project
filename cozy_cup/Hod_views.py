@@ -5,8 +5,51 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import CreateView
 from app.models import *
 from django.contrib import messages
+from django.views.generic.edit import CreateView
+import io
+import xlsxwriter
+from django.http import HttpResponse
+def Student_pdf(request):
+    students = Student.objects.all()
 
-from cozy_cup import Staff_views
+    # Create a BytesIO buffer to store the Excel file
+    buffer = io.BytesIO()
+
+    # Create a new Excel workbook and add a worksheet
+    workbook = xlsxwriter.Workbook(buffer)
+    worksheet = workbook.add_worksheet()
+
+    # Write headers
+    headers = ['Name', 'Address', 'Gender', 'Course', 'Session Year', 'Created At', 'Updated At']
+    for col, header in enumerate(headers):
+        worksheet.write(0, col, header)
+
+    # Write student information
+    row = 1
+    for student in students:
+        student_info = [
+            student.admin.get_full_name(),
+            student.address,
+            student.gender,
+            str(student.course_id),
+            str(student.session_year_id),
+            str(student.created_at),
+            str(student.updated_at)
+        ]
+        for col, info in enumerate(student_info):
+            worksheet.write(row, col, info)
+        row += 1
+
+    # Close the workbook
+    workbook.close()
+
+    # Reset the buffer's file pointer to the beginning
+    buffer.seek(0)
+
+    # Create an HTTP response with the Excel file
+    response = HttpResponse(buffer, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename=student_information.xlsx'
+    return response
 
 @login_required(login_url='/login/')
 def Home(request):
@@ -80,6 +123,15 @@ def Add_student(request):
                 gender = gender,
             )
             student.save()
+            fee = course.amount
+
+        # Create a billing instance for the student's course fee
+            Billing.objects.create(
+            student=student,
+            course=course,
+            amount=fee,
+            description=f"Course fee for {course.name}"
+             )
             messages.success(request, user.first_name + "  " + user.last_name + " Are Successfully Added !")
             return redirect('View_student')
 
@@ -91,12 +143,22 @@ def Add_student(request):
     }
 
     return render(request,'Hod/add_student.html',context)
-def View_student(request):
-    student=Student.objects.all()
-    context={
-         'student':student,
-    }
 
+def View_student(request):
+    students = list(Student.objects.all())  # Retrieve all Student objects
+    n = len(students)
+
+    # Bubble sort algorithm
+    for i in range(n - 1):
+        for j in range(0, n - i - 1):
+            # Compare adjacent objects based on created_at field
+            if students[j].created_at > students[j + 1].created_at:
+                students[j], students[j + 1] = students[j + 1], students[j]
+
+    context = {
+        'student': students,  # Pass sorted list of Student objects to the template
+    }
+    #return render(request, 'your_template.html', context)
     
     return render(request,'Hod/views_student.html',context)
 def Edit_student(request,id):
@@ -157,9 +219,11 @@ def Delete_student(request,admin):
 def Add_course(request):
     if request.method=="POST":
         course_name = request.POST['course_name']
+        course_amount = request.POST['class_amount']
         
         course=Course(
-            name=course_name
+            name=course_name,
+            amount=course_amount
         )
         course.save()
         messages.success(request,"course are sucessfully created")
@@ -483,3 +547,10 @@ def Student_disapprove_leave(request,id):
 
     # Redirect to the generated URL
     return HttpResponseRedirect(url)
+# class CreateBill(CreateView):
+#     model = Billing
+#     form_class = BillForm
+#     template_name = 'Hod/add_bill.html'
+def show_bills(request):
+    bills = Billing.objects.all()
+    return render(request, 'Hod/add_bill.html', {'bills': bills})

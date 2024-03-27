@@ -64,7 +64,7 @@
                </div>
       </form>
       {% else %}
-      <form method="post" action=" ">
+      <form method="post" action="{% url 'staff_save_result' %} ">
           {% csrf_token %}
                <div class="row">
                   <div class="col-sm-12">

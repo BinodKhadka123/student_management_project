@@ -15,6 +15,8 @@ admin.site.register(Student_leave)
 admin.site.register(StaffFeedback)
 admin.site.register(Student_notification)
 admin.site.register(StudentResult)
-
+admin.site.register(Billing)
+admin.site.register(Attendance)
+admin.site.register(AttendenceReport)
 
 # Register your models here.

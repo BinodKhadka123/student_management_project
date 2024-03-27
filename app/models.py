@@ -14,6 +14,7 @@ class CustomUser(AbstractUser):
 
 class Course(models.Model):
     name=models.CharField(max_length=50)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
     def __str__(self) :
@@ -99,11 +100,37 @@ class StudentResult(models.Model):
      student_id = models.ForeignKey(Student, on_delete=models.CASCADE)
      subject_id = models.ForeignKey(Subject, on_delete=models.CASCADE)
      assignment_mark=models.IntegerField()
-     eaxm_mark=models.IntegerField()
+     exam_mark=models.IntegerField()
      created_at=models.DateTimeField(auto_now_add=True)
      updated_at=models.DateTimeField(auto_now=True)
      def __str__(self):
         return self.student_id.admin.first_name 
+class Billing(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    description = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Billing for {self.student.admin.first_name} {self.student.admin.last_name} - Amount: {self.amount}"
+class Attendance(models.Model):
+    subject_id = models.ForeignKey(Subject, on_delete=models.CASCADE)
+    session_year_id = models.ForeignKey(Session, on_delete=models.CASCADE)
+    attendence_data = models.DateField()
+    created_at=models.DateTimeField(auto_now_add=True)
+    updated_at=models.DateTimeField(auto_now=True)
+   
+    def __str__(self):
+        return self.subject_id.name
+class AttendenceReport(models.Model):
+    student_id=models.ForeignKey(Student, on_delete=models.CASCADE)
+    attendence_id=models.ForeignKey(Attendance, on_delete=models.CASCADE)
+    created_at=models.DateTimeField(auto_now_add=True)
+    updated_at=models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return self.student_id.admin.first_name 
+    
     
 class StudentManager(models.Manager):
     def get_queryset(self):

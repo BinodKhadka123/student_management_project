@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Bills</title>
+</head>
+<body>
+    <h1>Billing Information for {{ student.admin.username }}</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th>Amount</th>
+                <th>Billed At</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for bill in bills %}
+            <tr>
+                <td>{{ bill.description }}</td>
+                <td>{{ bill.amount }}</td>
+                <td>{{ bill.billed_at }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3">No bills found</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

@@ -11,6 +11,7 @@
                <ul>
                   <li><a href="{% url 'Add_student' %}" class="active"> Add Student </a></li>
                   <li><a href="{% url 'View_student' %}"> View Student </a></li>
+                  <li><a href="{%url 'student_pdf'%}"> Fetch Student Report </a></li>
                   
                </ul>
             </li>
@@ -23,10 +24,10 @@
                </ul>
             </li>
             <li class="submenu">
-               <a href="#"><i class="fa fa-graduation-cap"></i> <span> Course</span> <span class="menu-arrow"></span></a>
+               <a href="#"><i class="fa fa-graduation-cap"></i> <span> Class</span> <span class="menu-arrow"></span></a>
                <ul>
-                  <li><a href="{% url 'Add_course' %}">Add Course</a></li>
-                  <li><a href="{% url 'View_course' %}">View Course</a></li>
+                  <li><a href="{% url 'Add_course' %}">Add Class</a></li>
+                  <li><a href="{% url 'View_course' %}">View Class</a></li>
                   
                </ul>
             </li>
@@ -66,21 +67,26 @@
                <a href="{%url 'student_leave_view' %}"><i class="fas fa-envelope"></i> <span>Student Leave</span></a>
             </li>
             <li>
+               <a href="{%url 'create_bill'%}"><i class="fas fa-sign-out-alt"></i> <span>Calculate Bill</span></a>
+            </li>
+            <li>
                <a href="{%url 'logout'%}"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
             </li>
          </ul>
          {% elif user.user_type == '2' %}
          <ul>
             <li>
-            <a href="{% url 'Hod_home' %}" class="fas fa-holly-berry"></i> <span> Dashboard</span>
+            <a href="{% url 'staff_home' %}" class="fas fa-holly-berry"></i> <span> Dashboard</span>
                 <span class="menu-arrow"></span></a>
                </li>
                <li>
-                <a href="{% url 'staff_take_attendence' %}" class="fas fa-calendar-alt"></i> <span> Take Attendance</span>
-                <span class="menu-arrow"></span></a>
-               </li>
+                  <a href="{% url 'take_attendence' %} " class="fas fa-calendar-alt"></i> <span> Take Attendance</span>
+                  <span class="menu-arrow"></span>
+              </a>
+              </li>
+              
                <li>
-                <a href="{% url 'Hod_home' %}" class="fas fa-calendar-alt"></i> <span> View/Update Attendence</span>
+                <a href="{% url 'view_attendence' %}" class="fas fa-calendar-alt"></i> <span> View/Update Attendence</span>
                   <span class="menu-arrow"></span></a>
                </li>
                <li>
@@ -107,9 +113,13 @@
                    <span class="menu-arrow"></span></a>
                   </li>
                   <li>
-                   <a href="{% url 'Hod_home' %}" class="fas fa-calendar"></i> <span> View Result</span>
+                   <a href="{% url 'student_view_result' %}" class="fas fa-calendar"></i> <span> View Result</span>
                    <span class="menu-arrow"></span></a>
                   </li>
+                  <li>
+                     <a href="{% url 'student_view_attendence' %}" class="fas fa-calendar-alt"></i> <span> View/Update Attendence</span>
+                       <span class="menu-arrow"></span></a>
+                    </li>
                   <li>
                      <a href="{% url 'leave' %}" class="fas fa-envelope-open"></i> <span> Apply For Leave </span>
                      <span class="menu-arrow"></span></a>
@@ -117,6 +127,10 @@
                     
                     <li>
                      <a href="{% url 'student_notification' %}" class="fas fa-bell"></i> <span> Notification</span>
+                     <span class="menu-arrow"></span></a>
+                    </li>
+                    <li>
+                     <a href="{% url 'view_student_bills' %}" lass="fas fa-sign-out-alt"></i> <span> View Bills </span>
                      <span class="menu-arrow"></span></a>
                     </li>
                     <li>
